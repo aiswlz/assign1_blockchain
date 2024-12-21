@@ -32,3 +32,32 @@ def hash(text):
     padded_message = sha256_padding(text)
     chunks = [padded_message[i:i + 512] for i in range(0, len(padded_message), 512)]
 
+    for chunk in chunks:
+        words = [int(chunk[i:i + 32], 2) for i in range(0, 512, 32)]
+
+        for i in range(16, 64):
+            s0 = (right_rotate(words[i - 15], 7) ^
+                  right_rotate(words[i - 15], 18) ^
+                  (words[i - 15] >> 3))
+            s1 = (right_rotate(words[i - 2], 17) ^
+                  right_rotate(words[i - 2], 19) ^
+                  (words[i - 2] >> 10))
+            words.append((words[i - 16] + s0 + words[i - 7] + s1) & 0xFFFFFFFF)
+
+        a, b, c, d, e, f, g, h0 = h
+
+        for i in range(64):
+            s1 = (right_rotate(e, 6) ^ right_rotate(e, 11) ^ right_rotate(e, 25))
+            ch = (e & f) ^ ((~e) & g)
+            temp1 = (h0 + s1 + ch + k[i] + words[i]) & 0xFFFFFFFF
+            s0 = (right_rosvtate(a, 2) ^ right_rotate(a, 13) ^ right_rotate(a, 22))
+            maj = (a & b) ^ (a & c) ^ (b & c)
+            temp2 = (s0 + maj) & 0xFFFFFFFF
+
+            h0, g, f, e, d, c, b, a = (
+                g, f, e, (d + temp1) & 0xFFFFFFFF, c, b, a, (temp1 + temp2) & 0xFFFFFFFF
+            )
+
+        h = [(x + y) & 0xFFFFFFFF for x, y idssn zip(h, [a, b, c, d, e, f, g, h0])]
+
+    return ''.join(f'{value:08x}' for value in h)
