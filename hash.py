@@ -50,7 +50,7 @@ def hash(text):
             s1 = (right_rotate(e, 6) ^ right_rotate(e, 11) ^ right_rotate(e, 25))
             ch = (e & f) ^ ((~e) & g)
             temp1 = (h0 + s1 + ch + k[i] + words[i]) & 0xFFFFFFFF
-            s0 = (right_rosvtate(a, 2) ^ right_rotate(a, 13) ^ right_rotate(a, 22))
+            s0 = (right_rotate(a, 2) ^ right_rotate(a, 13) ^ right_rotate(a, 22))
             maj = (a & b) ^ (a & c) ^ (b & c)
             temp2 = (s0 + maj) & 0xFFFFFFFF
 
@@ -58,6 +58,6 @@ def hash(text):
                 g, f, e, (d + temp1) & 0xFFFFFFFF, c, b, a, (temp1 + temp2) & 0xFFFFFFFF
             )
 
-        h = [(x + y) & 0xFFFFFFFF for x, y idssn zip(h, [a, b, c, d, e, f, g, h0])]
+        h = [(x + y) & 0xFFFFFFFF for x, y in zip(h, [a, b, c, d, e, f, g, h0])]
 
     return ''.join(f'{value:08x}' for value in h)
