@@ -17,3 +17,16 @@ if __name__ == "__main__":
     ]
     blockchain.add_block(transactions1)
 
+    if blockchain.validate_blockchain():
+        print("Blockchain is valid.")
+    else:
+        print("Blockchain is invalid.")
+
+    for block in blockchain.chain:
+        print(f"Block Hash: {block.hash}")
+        print(f"Previous Hash: {block.previous_hash}")
+        print(f"Merkle Root: {block.merkle_root}")
+        print(f"Timestamp: {block.timestamp}")
+        print("------")
+
+
