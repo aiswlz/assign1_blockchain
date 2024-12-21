@@ -1,4 +1,4 @@
-from sha256 import hash
+from hash import hash
 
 class Block:
     def __init__(self, previous_hash, timestamp, transactions):
