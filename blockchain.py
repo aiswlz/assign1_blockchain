@@ -21,7 +21,9 @@ class Blockchain:
         for i in range(1, len(self.chain)):
             current_block = self.chain[i]
             previous_block = self.chain[i - 1]
-            if current_block.hash != previous_block.hash:  
+            if current_block.previous_hash != previous_block.hash:
+                return False
+            if current_block.merkle_root != current_block.calculate_merkle_root():
                 return False
             if not current_block.hash.startswith("0" * self.difficulty):
                 return False
