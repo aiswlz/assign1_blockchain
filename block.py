@@ -8,6 +8,10 @@ class Block:
         self.nonce = 0
         self.hash = None
         
+    def calculate_merkle_root(self):
+        
+        return ""
+        
     def compute_hash(self):
         """Compute the SHA-256 hash of the block."""
         block_string = f"{self.previous_hash}{self.timestamp}{self.transactions}{self.nonce}"
