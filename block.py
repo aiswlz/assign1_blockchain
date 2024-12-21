@@ -9,8 +9,18 @@ class Block:
         self.hash = None
         
     def calculate_merkle_root(self):
-        
-        return ""
+        if not self.transactions:
+            return " "
+
+        transaction_hashes = [hash(tx) for tx in self.transactions]
+        while len(transaction_hashes) > 1:
+            if len(transaction_hashes) % 2 != 0:
+                transaction_hashes.append(transaction_hashes[-1])
+            transaction_hashes = [
+                hash(transaction_hashes[i] + transaction_hashes[i + 1])
+                for i in range(0, len(transaction_hashes), 2)
+            ]
+        return transaction_hashes[0]
         
     def compute_hash(self):
         """Compute the SHA-256 hash of the block."""
