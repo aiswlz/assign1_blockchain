@@ -1,32 +1,33 @@
-from blockchain import Blockchain
+from blockchain import EnhancedBlockchain
+from rsa import generate_keys
+from wallet import create_transaction
 
-if __name__ == "__main__":
-    blockchain = Blockchain()
 
-    transactions1 = [
-        "Alice->Bob->10",
-        "Bob->Charlie->20",
-        "Charlie->David->30",
-        "David->Eve->40",
-        "Eve->Frank->50",
-        "Frank->Grace->60",
-        "Grace->Hannah->70",
-        "Hannah->Ivy->80",
-        "Ivy->Jack->90",
-        "Jack->Kathy->100"
-    ]
-    blockchain.add_block(transactions1)
+blockchain = EnhancedBlockchain()
 
-    if blockchain.validate_blockchain():
-        print("Blockchain is valid.")
-    else:
-        print("Blockchain is invalid.")
+wallet_private_key, wallet_public_key = generate_keys()
+recipient_private_key, recipient_public_key = generate_keys()
 
-    for block in blockchain.chain:
-        print(f"Block Hash: {block.hash}")
-        print(f"Previous Hash: {block.previous_hash}")
-        print(f"Merkle Root: {block.merkle_root}")
-        print(f"Timestamp: {block.timestamp}")
-        print("------")
+transaction = create_transaction(
+    wallet_private_key,
+    wallet_public_key,
+    recipient_public_key,
+    "Alice",
+    "Bob",
+    100
+)
 
+# Save the transaction to a database (text file)
+blockchain.save_transaction_to_db(transaction)
+
+# Retrieve transactions and add them to the blockchain
+transactions = blockchain.retrieve_transactions_from_db()
+for tx in transactions:
+    blockchain.add_signed_transaction(tx)
+
+for block in blockchain.chain:
+    print("Block:")
+    print(f"  Hash: {block.hash}")
+    print(f"  Previous Hash: {block.previous_hash}")
+    print(f"  Transactions: {block.transactions}")
 
