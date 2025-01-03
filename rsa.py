@@ -63,7 +63,7 @@ def encrypt(message, public_key):
 def decrypt(ciphertext, private_key):
     d, n = private_key
     message_int = pow(ciphertext, d, n)
-
+    return message_int.to_bytes((message_int.bit_length() + 7) // 8, 'big').decode()
 
 
 
