@@ -1,6 +1,6 @@
 import time
 from block import Block
-from rsa import generate_keys
+from rsa import generate_keys,verify
 
 class Blockchain:
     def __init__(self):
@@ -34,3 +34,23 @@ class EnhancedBlockchain(Blockchain):
     def __init__(self):
         super().__init__()
         self.wallet_private_key, self.wallet_public_key = generate_keys()
+    def verify_transaction(self, transaction):
+        try:
+            sender_pub_key = transaction['sender_public_key']
+            document = transaction['document']
+            signature = transaction['signature']
+    
+            if not verify(sender_pub_key, document, signature):
+                raise ValueError("Signature is wrong")
+            if document != f"{transaction['sender']}->{transaction['receiver']}->{transaction['amount']}":
+                raise ValueError("Document is wrong")
+    
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+    def add_signed_transaction(self, transaction):
+        if self.verify_transaction(transaction):
+            self.add_block([transaction])
+
