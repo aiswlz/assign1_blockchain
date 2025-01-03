@@ -55,6 +55,15 @@ def generate_keys(bits=512):
     d = mod_inverse(e, phi)
     return (e, n), (d, n)
 
+def encrypt(message, public_key):
+    e, n = public_key
+    message_int = int.from_bytes(message.encode(), 'big')
+    return pow(message_int, e, n)
+
+def decrypt(ciphertext, private_key):
+    d, n = private_key
+    message_int = pow(ciphertext, d, n)
+
 
 
 
