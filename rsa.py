@@ -65,7 +65,16 @@ def decrypt(ciphertext, private_key):
     message_int = pow(ciphertext, d, n)
     return message_int.to_bytes((message_int.bit_length() + 7) // 8, 'big').decode()
 
+# === Digital Signatures ===
+def sign(private_key, document):
+    hashed = int.from_bytes(bytes.fromhex(hash(document)), 'big')
+    d, n = private_key
+    return pow(hashed, d, n)
 
+def verify(public_key, document, signature):
+    e, n = public_key
+    hashed = int.from_bytes(bytes.fromhex(hash(document)), 'big')
+    return hashed == pow(signature, e, n)
 
 
 
