@@ -1,5 +1,6 @@
 import time
 from block import Block
+from rsa import generate_keys
 
 class Blockchain:
     def __init__(self):
@@ -28,3 +29,8 @@ class Blockchain:
             if not current_block.hash.startswith("0" * self.difficulty):
                 return False
         return True
+        
+class EnhancedBlockchain(Blockchain):
+    def __init__(self):
+        super().__init__()
+        self.wallet_private_key, self.wallet_public_key = generate_keys()
